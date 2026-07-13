@@ -182,8 +182,7 @@
     gap:24px;
     align-items:center;
     padding:22px 26px;
-    cursor:pointer;
-  }
+      }
   .project-id{font-family:'JetBrains Mono', monospace; color:var(--text-dim); font-size:13px;}
   .project-title-row h3{font-size:19px; margin-bottom:6px;}
   .project-title-row .status{
@@ -198,13 +197,9 @@
     font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--text-dim);
     border:1px solid var(--line); padding:3px 8px; border-radius:2px;
   }
-  .chevron{color:var(--text-dim); font-size:18px; transition:transform .25s; flex-shrink:0;}
-  .project.open .chevron{transform:rotate(180deg); color:var(--amber);}
   .project-body{
-    max-height:0; overflow:hidden; transition:max-height .35s ease;
     border-top:1px solid var(--line);
   }
-  .project.open .project-body{max-height:900px;}
   .project-body-inner{padding:26px; display:grid; grid-template-columns:1.1fr 1fr; gap:32px;}
   .media-placeholder{
     aspect-ratio:16/10;
@@ -242,6 +237,27 @@
   .about-grid p{color:var(--text-dim); margin-bottom:16px; font-size:15px;}
   .about-grid strong{color:var(--text);}
 
+  /* EXPERIENCE / EDUCATION ENTRIES */
+  .entry{
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:var(--radius);
+    padding:26px;
+    margin-bottom:16px;
+  }
+  .entry-head{
+    display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px;
+    margin-bottom:14px;
+  }
+  .entry-head h3{font-size:18px;}
+  .entry-head .org{color:var(--teal); font-size:14px; font-family:'JetBrains Mono', monospace; margin-top:4px;}
+  .entry-head .dates{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--text-dim);
+    border:1px solid var(--line); padding:5px 10px; border-radius:2px; white-space:nowrap;
+  }
+  .entry ul{padding-left:18px; color:var(--text-dim); font-size:14.5px;}
+  .entry ul li{margin-bottom:7px;}
+
   /* CONTACT / FOOTER */
   footer{border-top:1px solid var(--line); padding:60px 0 40px;}
   .contact-box{
@@ -278,6 +294,8 @@
     <div class="navlinks">
       <a href="#work">Work</a>
       <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </div>
@@ -292,7 +310,7 @@
     <p class="lead">Game developer working in Unity, VR/XR, and interaction design, with a growing focus on serious games and simulation.</p>
     <div class="hero-actions">
       <a href="#work" class="btn btn-primary">View Projects ↓</a>
-      <a href="/resume.pdf" class="btn btn-ghost">View Résumé <span class="edit-note">[link your PDF]</span></a>
+      <a href="https://drive.google.com/drive/folders/1kcCl42po4TB0dF_Ho555pRChFKvPSQmF" target="_blank" rel="noopener" class="btn btn-ghost">View Résumé</a>
     </div>
 
     <div class="telemetry" id="telemetry">
@@ -304,13 +322,13 @@
         <div class="val">VR <span class="unit">/ XR</span></div>
         <div class="bar"><span style="width:85%"></span></div>
       </div>
-      <div class="cell" data-tag="Shipped Projects">
-        <div class="val">3<span class="unit">builds</span></div>
-        <div class="bar"><span style="width:70%"></span></div>
+      <div class="cell" data-tag="Experience">
+        <div class="val">Studio <span class="unit">Intern</span></div>
+        <div class="bar"><span style="width:65%"></span></div>
       </div>
-      <div class="cell" data-tag="Design">
-        <div class="val">UI<span class="unit">/UX</span></div>
-        <div class="bar"><span style="width:80%"></span></div>
+      <div class="cell" data-tag="Certifications">
+        <div class="val">4<span class="unit">earned</span></div>
+        <div class="bar"><span style="width:75%"></span></div>
       </div>
     </div>
   </div>
@@ -327,8 +345,8 @@
     </div>
 
 <!-- PROJECT 1: AI Soccer -->
-    <div class="project open" data-project="1">
-      <div class="project-head" onclick="toggleProject(this.parentElement)">
+    <div class="project" data-project="1">
+      <div class="project-head">
         <div class="project-id mono">P.01</div>
         <div class="project-title-row">
           <h3>SoccerTwos: Trained RL Agents <span class="status shipped">Playable Build</span></h3>
@@ -336,7 +354,6 @@
             <span>Unity ML-Agents</span><span>Reinforcement Learning</span><span>PPO</span><span>Simulation</span>
           </div>
         </div>
-        <div class="chevron">⌄</div>
       </div>
       <div class="project-body">
         <div class="project-body-inner">
@@ -364,7 +381,6 @@
             </div>
             <div class="project-links">
               <a href="https://farrukhabbassyed.itch.io/soccertwos-trained-rl-agents">▶ Play the Build</a>
-              <a href="#">View on GitHub</a>
             </div>
           </div>
         </div>
@@ -373,7 +389,7 @@
 
     <!-- PROJECT 2: Chroma Blast -->
     <div class="project" data-project="2">
-      <div class="project-head" onclick="toggleProject(this.parentElement)">
+      <div class="project-head">
         <div class="project-id mono">P.02</div>
         <div class="project-title-row">
           <h3>Chroma Blast <span class="status shipped">Final Year Project</span></h3>
@@ -381,7 +397,6 @@
             <span>Unity 6</span><span>XR Interaction Toolkit</span><span>Meta Quest 2/3</span><span>Photon PUN2/Fusion</span><span>AI Navigation</span>
           </div>
         </div>
-        <div class="chevron">⌄</div>
       </div>
       <div class="project-body">
         <div class="project-body-inner">
@@ -405,7 +420,6 @@
             </div>
             <div class="project-links">
               <a href="https://youtu.be/LY2q54VLfMM">▶ Gameplay Footage</a>
-              <a href="#">View on GitHub</a>
             </div>
           </div>
         </div>
@@ -414,7 +428,7 @@
 
 <!-- PROJECT 3: Fuse Well -->
     <div class="project" data-project="3">
-      <div class="project-head" onclick="toggleProject(this.parentElement)">
+      <div class="project-head">
         <div class="project-id mono">P.03</div>
         <div class="project-title-row">
           <h3>Fuse Well <span class="status shipped">Submission Ready</span></h3>
@@ -422,7 +436,6 @@
             <span>HTML5</span><span>Hyper-Casual</span><span>Puzzle</span><span>CrazyGames</span>
           </div>
         </div>
-        <div class="chevron">⌄</div>
       </div>
       <div class="project-body">
         <div class="project-body-inner">
@@ -446,7 +459,6 @@
             </div>
             <div class="project-links">
               <a href="#">▶ Play on itch.io</a>
-              <a href="#">View on GitHub</a>
             </div>
           </div>
         </div>
@@ -468,7 +480,7 @@
       <div class="skill-block">
         <h4>Engines & Languages</h4>
         <div class="skill-tags">
-          <span>Unity</span><span>C#</span><span>Unity XR Toolkit</span><span>OpenXR</span><span>ML-Agents</span>
+          <span>Unity</span><span>Unreal Engine</span><span>C#</span><span>C++</span><span>Python</span><span>Unity XR Toolkit</span><span>OpenXR</span><span>ML-Agents</span>
         </div>
       </div>
       <div class="skill-block">
@@ -484,10 +496,100 @@
         </div>
       </div>
       <div class="skill-block">
-        <h4>Pipeline</h4>
+        <h4>Pipeline & Tools</h4>
         <div class="skill-tags">
-          <span>Git</span><span>Blender</span><span>Figma</span><span>Playtesting</span>
+          <span>Git</span><span>Blender</span><span>Figma</span><span>Adobe Photoshop</span><span>Playtesting</span>
         </div>
+      </div>
+      <div class="skill-block">
+        <h4>Certifications</h4>
+        <div class="skill-tags">
+          <span>Intro to VR (University of London)</span><span>3D Interaction Design in VR (University of London)</span><span>Generative AI Mastery (HP)</span><span>Junior Cybersecurity Analyst (CISCO)</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <h4>Languages</h4>
+        <div class="skill-tags">
+          <span>English</span><span>German</span><span>Urdu</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">Log Entries</span>
+        <h2>Work Experience</h2>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <div>
+          <h3>Game Programmer Intern</h3>
+          <div class="org">Mindstorm Studios</div>
+        </div>
+        <div class="dates">Internship</div>
+      </div>
+      <ul>
+        <li>Developed small game projects in Unity using C# to implement core gameplay systems.</li>
+        <li>Implemented player movement, game mechanics, and basic enemy or object behaviors.</li>
+        <li>Worked with Unity components, prefabs, and scenes to build and organize gameplay features.</li>
+        <li>Debugged gameplay issues and fixed bugs to improve stability and playability.</li>
+        <li>Integrated UI elements, animations, and audio into gameplay using Unity tools.</li>
+        <li>Followed clean coding practices and project structure to keep scripts readable and maintainable.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <div>
+          <h3>Unity Game Developer</h3>
+          <div class="org">Personal Projects</div>
+        </div>
+        <div class="dates">Ongoing</div>
+      </div>
+      <ul>
+        <li>Developed multiple 2D and 3D game prototypes in Unity using C#.</li>
+        <li>Implemented player movement, game mechanics, and object interactions.</li>
+        <li>Created and integrated UI elements, animations, and sound into playable scenes.</li>
+        <li>Debugged issues and optimized small scenes for smoother gameplay.</li>
+        <li>Built reusable scripts and prefabs to maintain organized and clean project structure.</li>
+        <li>Tested projects on PC and mobile platforms to ensure functionality and user experience.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">Background</span>
+        <h2>Education</h2>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <div>
+          <h3>Bachelors in Computer Games Development</h3>
+          <div class="org">Air University, Islamabad, Pakistan</div>
+        </div>
+        <div class="dates">Sep 2021 – 2026</div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <div>
+          <h3>Faculty of Science</h3>
+          <div class="org">Milestone Educational System, Rawalpindi</div>
+        </div>
+        <div class="dates">Aug 2018 – June 2020</div>
       </div>
     </div>
   </div>
@@ -503,12 +605,12 @@
     </div>
     <div class="about-grid">
       <div>
-        <p>I'm a Computer Games Development student and developer working under the <strong>Tech Brothers</strong> banner, based in Islamabad, Pakistan. My work spans hyper-casual mobile games, VR/XR interaction design, and increasingly, simulation systems where games are built to teach, train, or model real behavior rather than just entertain.</p>
-        <p>[Add 1-2 sentences here about your internship at Mindstorm Studios and your involvement with Air University's Business Incubation Centre. Concrete experience like this builds credibility fast.]</p>
+        <p><strong>Game Developer and Simulation Engineer</strong> with practical, hands-on experience building VR and simulation projects in Unity using C#. Familiar with the XR Interaction Toolkit, VR input systems, and real-time 3D workflows.</p>
+        <p>Has worked on multiple projects and prototypes, including physics-based simulation and multiplayer systems, with a focus on clean code, debugging, and performance.</p>
       </div>
       <div>
-        <p>I'm currently looking for a <strong>remote internship in serious games or immersive simulation</strong>, whether that's training tools, EdTech, or healthcare and defense simulation, where I can apply Unity/XR development alongside UI/UX design thinking to systems built for a real-world purpose.</p>
-        <p>[Optional: one line about what draws you personally to serious games / simulation, distinct from entertainment-only development.]</p>
+        <p>Comfortable following technical direction, collaborating with designers, and contributing to team-based development.</p>
+        <p>Currently looking for a role or internship to continue developing production skills in Unity, VR, and simulation-focused game development.</p>
       </div>
     </div>
   </div>
@@ -522,25 +624,15 @@
       <div class="contact-links">
         <a class="btn btn-primary" href="mailto:your@email.com">Email Me</a>
         <a class="btn btn-ghost" href="#">LinkedIn</a>
-        <a class="btn btn-ghost" href="#">GitHub</a>
-        <a class="btn btn-ghost" href="#">itch.io</a>
       </div>
     </div>
     <div class="foot-bottom">
       <span>SYED FARRUKH ABBAS | GAME DEV / XR</span>
-      <span>BUILD 2026.07 · ISLAMABAD, PK</span>
     </div>
   </div>
 </footer>
 
 <script>
-  function toggleProject(el){
-    document.querySelectorAll('.project').forEach(p=>{
-      if(p!==el) p.classList.remove('open');
-    });
-    el.classList.toggle('open');
-  }
-
   // animate telemetry bars on load
   window.addEventListener('load', ()=>{
     document.querySelectorAll('.telemetry .bar span').forEach(bar=>{
