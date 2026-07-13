@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saadi — Game Developer / Unity XR / Serious Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#11141a;
+    --surface:#181c24;
+    --surface-2:#1f2430;
+    --line:#2a3040;
+    --text:#e9ebf1;
+    --text-dim:#9aa2b4;
+    --amber:#f2a93b;
+    --teal:#4fb6a8;
+    --danger:#e26a5c;
+    --radius:2px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'JetBrains Mono', monospace;}
+  h1,h2,h3{font-family:'Space Grotesk', sans-serif; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  ::selection{background:var(--amber); color:#11141a;}
+
+  /* Background grid texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:0.15;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:1100px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(17,20,26,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .logo{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:17px; display:flex; align-items:center; gap:8px;}
+  .logo .dot{width:8px; height:8px; background:var(--amber); border-radius:50%; box-shadow:0 0 8px var(--amber);}
+  .navlinks{display:flex; gap:32px; font-size:14px; color:var(--text-dim);}
+  .navlinks a{transition:color .2s;}
+  .navlinks a:hover{color:var(--amber);}
+  .nav-cta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    border:1px solid var(--amber);
+    color:var(--amber);
+    padding:8px 14px;
+    border-radius:var(--radius);
+    transition:all .2s;
+  }
+  .nav-cta:hover{background:var(--amber); color:#11141a;}
+  .menu-btn{display:none; background:none; border:none; color:var(--text); font-size:22px; cursor:pointer;}
+
+  /* HERO */
+  header.hero{padding:88px 0 56px; position:relative;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--teal);
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--teal);}
+  .hero h1{
+    font-size:clamp(36px, 6vw, 60px);
+    font-weight:700;
+    line-height:1.05;
+    max-width:780px;
+    margin-bottom:20px;
+  }
+  .hero h1 span{color:var(--amber);}
+  .hero p.lead{
+    font-size:17px;
+    color:var(--text-dim);
+    max-width:540px;
+    margin-bottom:36px;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:56px;}
+  .btn{
+    padding:13px 22px;
+    border-radius:var(--radius);
+    font-size:14px;
+    font-weight:600;
+    font-family:'Inter', sans-serif;
+    transition:all .2s;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{background:var(--amber); color:#11141a;}
+  .btn-primary:hover{background:#ffc266; transform:translateY(-1px);}
+  .btn-ghost{border:1px solid var(--line); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--text-dim);}
+
+  /* TELEMETRY STRIP - signature element */
+  .telemetry{
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:var(--radius);
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+  }
+  .telemetry .cell{
+    padding:20px 22px;
+    border-right:1px solid var(--line);
+    position:relative;
+  }
+  .telemetry .cell:last-child{border-right:none;}
+  .telemetry .cell::before{
+    content:attr(data-tag);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    color:var(--text-dim);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:8px;
+  }
+  .telemetry .val{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:26px;
+    font-weight:600;
+    color:var(--text);
+  }
+  .telemetry .val .unit{font-size:13px; color:var(--teal); font-weight:500; margin-left:2px;}
+  .telemetry .bar{
+    height:3px; background:var(--surface-2); border-radius:2px; margin-top:10px; overflow:hidden;
+  }
+  .telemetry .bar span{
+    display:block; height:100%; background:var(--amber); width:0%;
+    transition:width 1.2s cubic-bezier(.2,.8,.2,1);
+  }
+
+  /* SECTION HEADERS */
+  section{padding:80px 0;}
+  .sec-head{margin-bottom:44px; display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+  .sec-head .tag{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--amber);
+    letter-spacing:0.1em; text-transform:uppercase; margin-bottom:10px; display:block;
+  }
+  .sec-head h2{font-size:clamp(26px,4vw,34px);}
+  .sec-head p{color:var(--text-dim); font-size:14px; max-width:420px;}
+
+  /* PROJECTS - build log cards */
+  .project{
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:var(--radius);
+    margin-bottom:20px;
+    overflow:hidden;
+    transition:border-color .25s;
+  }
+  .project:hover{border-color:#3a4256;}
+  .project-head{
+    display:grid;
+    grid-template-columns:120px 1fr auto;
+    gap:24px;
+    align-items:center;
+    padding:22px 26px;
+    cursor:pointer;
+  }
+  .project-id{font-family:'JetBrains Mono', monospace; color:var(--text-dim); font-size:13px;}
+  .project-title-row h3{font-size:19px; margin-bottom:6px;}
+  .project-title-row .status{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    padding:3px 8px; border-radius:2px; text-transform:uppercase; letter-spacing:0.06em;
+    display:inline-block;
+  }
+  .status.shipped{background:rgba(79,182,168,0.15); color:var(--teal); border:1px solid rgba(79,182,168,0.35);}
+  .status.progress{background:rgba(242,169,59,0.15); color:var(--amber); border:1px solid rgba(242,169,59,0.35);}
+  .project-tags{display:flex; gap:8px; flex-wrap:wrap;}
+  .project-tags span{
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--text-dim);
+    border:1px solid var(--line); padding:3px 8px; border-radius:2px;
+  }
+  .chevron{color:var(--text-dim); font-size:18px; transition:transform .25s; flex-shrink:0;}
+  .project.open .chevron{transform:rotate(180deg); color:var(--amber);}
+  .project-body{
+    max-height:0; overflow:hidden; transition:max-height .35s ease;
+    border-top:1px solid var(--line);
+  }
+  .project.open .project-body{max-height:900px;}
+  .project-body-inner{padding:26px; display:grid; grid-template-columns:1.1fr 1fr; gap:32px;}
+  .media-placeholder{
+    aspect-ratio:16/10;
+    border-radius:var(--radius);
+    background:
+      repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 10px, #232838 10px, #232838 20px);
+    border:1px dashed var(--line);
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    padding:20px;
+  }
+  .media-placeholder p{font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-dim); line-height:1.7;}
+  .project-meta{display:flex; flex-direction:column; gap:18px;}
+  .meta-row .label{font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--teal); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;}
+  .meta-row .value{font-size:14.5px; color:var(--text-dim);}
+  .project-links{display:flex; gap:10px; margin-top:6px;}
+  .project-links a{
+    font-family:'JetBrains Mono', monospace; font-size:12px;
+    border:1px solid var(--line); padding:8px 14px; border-radius:2px;
+    transition:all .2s;
+  }
+  .project-links a:hover{border-color:var(--amber); color:var(--amber);}
+
+  /* SKILLS */
+  .skills-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+  .skill-block{border:1px solid var(--line); background:var(--surface); border-radius:var(--radius); padding:22px;}
+  .skill-block h4{font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--amber); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px;}
+  .skill-tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .skill-tags span{
+    font-size:13px; padding:6px 12px; background:var(--surface-2); border-radius:2px; color:var(--text);
+  }
+
+  /* ABOUT */
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
+  .about-grid p{color:var(--text-dim); margin-bottom:16px; font-size:15px;}
+  .about-grid strong{color:var(--text);}
+
+  /* CONTACT / FOOTER */
+  footer{border-top:1px solid var(--line); padding:60px 0 40px;}
+  .contact-box{
+    border:1px solid var(--line); background:var(--surface); border-radius:var(--radius);
+    padding:44px; text-align:center; margin-bottom:40px;
+  }
+  .contact-box h2{font-size:clamp(24px,4vw,32px); margin-bottom:12px;}
+  .contact-box p{color:var(--text-dim); margin-bottom:26px;}
+  .contact-links{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+  .foot-bottom{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:12.5px; color:var(--text-dim); font-family:'JetBrains Mono', monospace;}
+
+  /* EDIT NOTES */
+  .edit-note{color:var(--danger); font-size:10.5px; font-family:'JetBrains Mono', monospace;}
+
+  @media (max-width:760px){
+    .navlinks{display:none;}
+    .menu-btn{display:block;}
+    .telemetry{grid-template-columns:repeat(2,1fr);}
+    .telemetry .cell:nth-child(2){border-right:none;}
+    .telemetry .cell{border-bottom:1px solid var(--line);}
+    .project-head{grid-template-columns:1fr auto; gap:10px;}
+    .project-id{display:none;}
+    .project-body-inner{grid-template-columns:1fr;}
+    .skills-grid{grid-template-columns:1fr;}
+    .about-grid{grid-template-columns:1fr; gap:24px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>SAADI // TECH BROTHERS</div>
+    <div class="navlinks">
+      <a href="#work">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="#contact">GET IN TOUCH</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">SYSTEM STATUS · OPEN TO REMOTE INTERNSHIPS</div>
+    <h1>Building interactive systems<br>that <span>train, teach & simulate</span>.</h1>
+    <p class="lead">Game developer specializing in Unity, VR/XR, and interaction design — with a growing focus on serious games and simulation-based experiences. Currently based in Islamabad, working remote.</p>
+    <div class="hero-actions">
+      <a href="#work" class="btn btn-primary">View Projects ↓</a>
+      <a href="/resume.pdf" class="btn btn-ghost">Download Résumé <span class="edit-note">[link your PDF]</span></a>
+    </div>
+
+    <div class="telemetry" id="telemetry">
+      <div class="cell" data-tag="Engines">
+        <div class="val">Unity <span class="unit">/ C#</span></div>
+        <div class="bar"><span style="width:95%"></span></div>
+      </div>
+      <div class="cell" data-tag="Focus">
+        <div class="val">VR <span class="unit">/ XR</span></div>
+        <div class="bar"><span style="width:85%"></span></div>
+      </div>
+      <div class="cell" data-tag="Shipped Projects">
+        <div class="val">4<span class="unit">builds</span></div>
+        <div class="bar"><span style="width:70%"></span></div>
+      </div>
+      <div class="cell" data-tag="Design">
+        <div class="val">UI<span class="unit">/UX</span></div>
+        <div class="bar"><span style="width:80%"></span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">Build Log</span>
+        <h2>Selected Projects</h2>
+      </div>
+      <p>Four builds spanning hyper-casual, VR, and reinforcement-learning systems. Click a row to expand.</p>
+    </div>
+
+    <!-- PROJECT 1: Fuse Well -->
+    <div class="project open" data-project="1">
+      <div class="project-head" onclick="toggleProject(this.parentElement)">
+        <div class="project-id mono">P.01</div>
+        <div class="project-title-row">
+          <h3>Fuse Well <span class="status shipped">Submission Ready</span></h3>
+          <div class="project-tags">
+            <span>HTML5</span><span>Hyper-Casual</span><span>Puzzle</span><span>CrazyGames</span>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <div>
+            <div class="media-placeholder">
+              <p>[ REPLACE WITH GAMEPLAY CLIP / GIF ]<br>Show core loop + power-up interaction, 15–20s</p>
+            </div>
+          </div>
+          <div class="project-meta">
+            <div class="meta-row">
+              <div class="label">The Brief</div>
+              <div class="value">Design and ship a browser-based hyper-casual puzzle game meeting CrazyGames' submission standards — fast load, immediate readability, session-friendly pacing.</div>
+            </div>
+            <div class="meta-row">
+              <div class="label">My Role</div>
+              <div class="value">Solo developer & designer — game design, Unity/HTML5 implementation, UI/UX, and submission packaging.</div>
+            </div>
+            <div class="meta-row">
+              <div class="label">A Real Problem I Solved</div>
+              <div class="value">Power-up buttons designed for portrait mobile broke the reading flow in landscape/desktop view. Repositioned the HUD layout responsively so the power-up cluster stays within thumb/mouse reach without blocking the play field — a small UX fix with outsized retention impact.</div>
+            </div>
+            <div class="project-links">
+              <a href="#">▶ Play on itch.io</a>
+              <a href="#">View on GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 2: VR Game 1 -->
+    <div class="project" data-project="2">
+      <div class="project-head" onclick="toggleProject(this.parentElement)">
+        <div class="project-id mono">P.02</div>
+        <div class="project-title-row">
+          <h3>[VR Game Title 1] <span class="status progress">Add Status</span></h3>
+          <div class="project-tags">
+            <span>Unity</span><span>VR</span><span>C#</span><span>[Headset/SDK]</span>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <div>
+            <div class="media-placeholder">
+              <p>[ REPLACE WITH ON-HEADSET SCREEN CAPTURE ]<br>Show hand-tracking / locomotion / interaction — video, not screenshots</p>
+            </div>
+          </div>
+          <div class="project-meta">
+            <div class="meta-row">
+              <div class="label">The Brief</div>
+              <div class="value">[What were you building and why — 1–2 sentences]</div>
+            </div>
+            <div class="meta-row">
+              <div class="label">My Role</div>
+              <div class="value">[Solo / team — what you specifically owned: mechanics, interaction design, UI, optimization]</div>
+            </div>
+            <div class="meta-row">
+              <div class="label">Interaction Design Notes</div>
+              <div class="value">[e.g. locomotion method chosen and why, comfort settings, spatial UI decisions — this is what serious-games reviewers look for]</div>
+            </div>
+            <div class="project-links">
+              <a href="#">▶ Demo Video</a>
+              <a href="#">View on GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 3: VR Game 2 -->
+    <div class="project" data-project="3">
+      <div class="project-head" onclick="toggleProject(this.parentElement)">
+        <div class="project-id mono">P.03</div>
+        <div class="project-title-row">
+          <h3>[VR Game Title 2] <span class="status progress">Add Status</span></h3>
+          <div class="project-tags">
+            <span>Unity</span><span>VR</span><span>C#</span><span>[Headset/SDK]</span>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <div>
+            <div class="media-placeholder">
+              <p>[ REPLACE WITH ON-HEADSET SCREEN CAPTURE ]</p>
+            </div>
+          </div>
+          <div class="project-meta">
+            <div class="meta-row">
+              <div class="label">The Brief</div>
+              <div class="value">[What made this different from VR Game 1 — different genre, mechanic, or technical challenge?]</div>
+            </div>
+            <div class="meta-row">
+              <div class="label">My Role</div>
+              <div class="value">[Your specific contribution]</div>
+            </div>
+            <div class="meta-row">
+              <div class="label">What I'd Improve</div>
+              <div class="value">[One honest note — shows self-awareness to reviewers]</div>
+            </div>
+            <div class="project-links">
+              <a href="#">▶ Demo Video</a>
+              <a href="#">View on GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 4: AI Soccer -->
+    <div class="project" data-project="4">
+      <div class="project-head" onclick="toggleProject(this.parentElement)">
+        <div class="project-id mono">P.04</div>
+        <div class="project-title-row">
+          <h3>Autonomous Soccer Agents <span class="status progress">Add Status</span></h3>
+          <div class="project-tags">
+            <span>Unity ML-Agents</span><span>Reinforcement Learning</span><span>C#</span><span>Simulation</span>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <div>
+            <div class="media-placeholder">
+              <p>[ REPLACE WITH TRAINING FOOTAGE / TENSORBOARD GRAPH + GAMEPLAY CLIP ]</p>
+            </div>
+          </div>
+          <div class="project-meta">
+            <div class="meta-row">
+              <div class="label">The Brief</div>
+              <div class="value">Trained autonomous agents to play soccer inside a Unity ML-Agents environment — a self-directed exploration of reinforcement learning applied to game simulation.</div>
+            </div>
+            <div class="meta-row">
+              <div class="label">Technical Approach</div>
+              <div class="value">[e.g. reward function design, observation/action space, training algorithm used (PPO/SAC), episode count, curriculum learning if any]</div>
+            </div>
+            <div class="meta-row">
+              <div class="label">Why It Matters for Serious Games</div>
+              <div class="value">Agent training and behavioral simulation are core to defense/training simulators — this project demonstrates the same systems-thinking those studios hire for.</div>
+            </div>
+            <div class="project-links">
+              <a href="#">▶ Training Footage</a>
+              <a href="#">View on GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">Instrumentation</span>
+        <h2>Tools & Skills</h2>
+      </div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-block">
+        <h4>Engines & Languages</h4>
+        <div class="skill-tags">
+          <span>Unity</span><span>C#</span><span>Unity XR Toolkit</span><span>OpenXR</span><span>ML-Agents</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <h4>Design</h4>
+        <div class="skill-tags">
+          <span>Game Design</span><span>UI/UX Design</span><span>Level Design</span><span>Systems Design</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <h4>VR / XR</h4>
+        <div class="skill-tags">
+          <span>Meta Quest</span><span>Hand Tracking</span><span>Locomotion Design</span><span>Spatial UI</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <h4>Pipeline</h4>
+        <div class="skill-tags">
+          <span>Git</span><span>Blender</span><span>Figma</span><span>Playtesting</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">Background</span>
+        <h2>About</h2>
+      </div>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>I'm a Computer Games Development student and developer working under the <strong>Tech Brothers</strong> banner, based in Islamabad, Pakistan. My work spans hyper-casual mobile games, VR/XR interaction design, and — increasingly — simulation systems where games are built to teach, train, or model real behavior rather than just entertain.</p>
+        <p>[Add 1–2 sentences here about your internship at Mindstorm Studios and your involvement with Air University's Business Incubation Centre — concrete experience like this builds credibility fast.]</p>
+      </div>
+      <div>
+        <p>I'm currently looking for a <strong>remote internship in serious games or immersive simulation</strong> — training tools, EdTech, or healthcare/defense simulation — where I can apply Unity/XR development alongside UI/UX design thinking to systems built for a real-world purpose.</p>
+        <p>[Optional: one line about what draws you personally to serious games / simulation, distinct from entertainment-only development.]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <h2>Let's build something.</h2>
+      <p>Open to remote internships and junior roles in serious games, XR, and simulation development.</p>
+      <div class="contact-links">
+        <a class="btn btn-primary" href="mailto:your@email.com">Email Me</a>
+        <a class="btn btn-ghost" href="#">LinkedIn</a>
+        <a class="btn btn-ghost" href="#">GitHub</a>
+        <a class="btn btn-ghost" href="#">itch.io</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>SAADI // TECH BROTHERS — GAME DEV / XR</span>
+      <span>BUILD 2026.07 · ISLAMABAD, PK</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleProject(el){
+    document.querySelectorAll('.project').forEach(p=>{
+      if(p!==el) p.classList.remove('open');
+    });
+    el.classList.toggle('open');
+  }
+
+  // animate telemetry bars on load
+  window.addEventListener('load', ()=>{
+    document.querySelectorAll('.telemetry .bar span').forEach(bar=>{
+      const w = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(()=>{ bar.style.width = w; }, 200);
+    });
+  });
+</script>
+
+</body>
+</html>
